@@ -1,0 +1,14 @@
+data:
+  dataset: circles        # circles | moons | blobs
+  n_samples: 300
+  noise: 0.05
+  factor: 0.4             # pouze pro circles - pomer vnitrniho a vnejsiho polomeru
+  random_state: 42
+
+dbscan:
+  eps: 0.2
+  min_samples: 5
+
+spectral:
+  n_clusters: 2
+  sigma: 0.1               # sirka gaussovskeho jadra afinitni matice

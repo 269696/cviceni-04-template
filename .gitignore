@@ -216,3 +216,10 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Cviceni 04 - generated artifacts (keep placeholder dirs via .gitkeep)
+graphs/*.png
+data/*.npz
+!.gitkeep
+
+.vscode/
