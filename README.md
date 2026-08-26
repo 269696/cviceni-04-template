@@ -71,17 +71,17 @@ cviceni-04-template/
 ### 1. Vytvoření virtuálního prostředí
 
 ```bash
-python -m venv .env
+python -m venv .venv
 ```
 
 Aktivace (Windows):
 ```bash
-.env\Scripts\activate
+.venv\Scripts\activate
 ```
 
 Aktivace (Linux / macOS):
 ```bash
-source .env/bin/activate
+source .venv/bin/activate
 ```
 
 ### 2. Instalace závislostí

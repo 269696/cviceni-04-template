@@ -49,13 +49,19 @@ Description:
 
 from __future__ import annotations
 
-from dataio.config_manager import load_config
-from dataio.datasets import make_dataset
-from dataio.plotting import plot_clusters, plot_eigenvalues, plot_k_distance
-from src.dbscan import DBSCAN
-from src.distance import EuclideanDistance
-from src.metrics import adjusted_rand_index
-from src.spectral import SpectralClustering
+import sys
+
+try:
+    from dataio.config_manager import load_config
+    from dataio.datasets import make_dataset
+    from dataio.plotting import plot_clusters, plot_eigenvalues, plot_k_distance
+    from src.dbscan import DBSCAN
+    from src.distance import EuclideanDistance
+    from src.metrics import adjusted_rand_index
+    from src.spectral import SpectralClustering
+except ImportError as e:
+    print(f"Chyba importu: {e}")
+    sys.exit(1)
 
 
 def _print_stub_error(stage_name: str, error: NotImplementedError) -> None:
@@ -101,7 +107,11 @@ def main() -> None:
         None
     """
     # 1. Nacteni konfigurace a vygenerovani datove sady (bez ukolu).
-    cfg = load_config()
+    try:
+        cfg = load_config()
+    except (ValueError, AssertionError) as e:
+        print(f"Neplatná konfigurace: {e}")
+        sys.exit(1)
     x, y_true = make_dataset(cfg.data)
 
     # 2. Referencni graf skutecneho rozdeleni.

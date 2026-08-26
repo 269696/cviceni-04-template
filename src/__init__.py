@@ -15,8 +15,18 @@ GitHub: RicRedi
 _/|_
 
 Description:
-    Balíček s algoritmy pokročilého shlukování (Cvičení 04): DBSCAN,
-    spektrální shlukování, vzdálenostní míry a validační metriky.
+    Balíček src - algoritmy pokročilého shlukování pro Cvičení 04.
+
+    Veřejné API:
+        Distance            - abstraktní základ pro metriky vzdálenosti (stub - z Cvičení 01)
+        EuclideanDistance   - euklidovská metrika (stub - k implementaci)
+        ManhattanDistance   - manhattanská metrika (stub - k implementaci)
+        CosineCoeficient    - kosinová podobnost (stub - k implementaci)
+        Clusterer           - tenké abstraktní rozhraní fit/predict pro DBSCAN a SpectralClustering
+        DBSCAN              - hustotně založené shlukování (stub - k implementaci)
+        SpectralClustering  - shlukování přes graf podobnosti a jeho spektrum
+                              (stub - k implementaci)
+        adjusted_rand_index - Adjusted Rand Index, externí validační metrika (BONUS - stub)
 """
 
 from __future__ import annotations

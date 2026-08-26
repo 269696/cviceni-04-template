@@ -32,14 +32,17 @@ class Distance(ABC):
     Abstraktní základní třída pro výpočet vzdálenosti (nepodobnosti)
     mezi dvěma vektory příznaků.
 
-    Konkrétní podtřídy definují třídní atribut ``is_metric``, který říká,
+    Konkrétní podtřídy implementují vlastnost ``is_metric``, která říká,
     zda daná míra splňuje axiomy metriky (zejména trojúhelníkovou
     nerovnost). Např. eukleidovská a manhattanská vzdálenost jsou skutečné
     metriky, zatímco kosinová vzdálenost (1 - kosinová podobnost) trojúhelníkovou
     nerovnost obecně nesplňuje, a tedy metrikou není.
     """
 
-    is_metric: bool
+    @property
+    @abstractmethod
+    def is_metric(self) -> bool:
+        """Vrátí True, pokud vzdálenost splňuje axiomy metriky."""
 
     @abstractmethod
     def calculate(self, x: np.ndarray, y: np.ndarray) -> float:
@@ -104,7 +107,13 @@ class Distance(ABC):
 class EuclideanDistance(Distance):
     """Eukleidovská (L2) vzdálenost mezi dvěma vektory."""
 
-    is_metric = True
+    @property
+    def is_metric(self) -> bool:
+        """Eukleidovská vzdálenost je pravá metrika."""
+        raise NotImplementedError(
+            "Úkol: Implementujte EuclideanDistance.is_metric()"
+            "Vrátí True, pokud vzdálenost splňuje axiomy metriky."
+        )
 
     def calculate(self, x: np.ndarray, y: np.ndarray) -> float:
         """
@@ -133,7 +142,13 @@ class EuclideanDistance(Distance):
 class ManhattanDistance(Distance):
     """Manhattanská (L1, taxicab) vzdálenost mezi dvěma vektory."""
 
-    is_metric = True
+    @property
+    def is_metric(self) -> bool:
+        """Manhattanská vzdálenost je pravá metrika."""
+        raise NotImplementedError(
+            "Úkol: Implementujte ManhattanDistance.is_metric()"
+            "Vrátí True, pokud vzdálenost splňuje axiomy metriky."
+        )
 
     def calculate(self, x: np.ndarray, y: np.ndarray) -> float:
         """
@@ -162,12 +177,15 @@ class ManhattanDistance(Distance):
 class CosineCoeficient(Distance):
     """
     Kosinová vzdálenost (1 - kosinová podobnost) mezi dvěma vektory.
-
-    Pozor: nejedná se o skutečnou metriku (neplatí trojúhelníková
-    nerovnost), viz is_metric = False.
     """
 
-    is_metric = False
+    @property
+    def is_metric(self) -> bool:
+        """Kosinová vzdálenost není pravá metrika (porušuje trojúhelníkovou nerovnost)."""
+        raise NotImplementedError(
+            "Úkol: Implementujte CosineCoeficient.is_metric()"
+            "Vrátí True, pokud vzdálenost splňuje axiomy metriky."
+        )
 
     def calculate(self, x: np.ndarray, y: np.ndarray) -> float:
         """
