@@ -86,13 +86,82 @@ def adjusted_rand_index(labels_true: np.ndarray, labels_pred: np.ndarray) -> flo
     """
     # assert  Ověřte, že labels_true i labels_pred jsou typu np.ndarray
     # assert  Ověřte, že labels_true a labels_pred jsou 1D pole stejné délky
-    raise NotImplementedError(
-        "Úkol: (BONUS) Implementujte výpočet Adjusted Rand Index (ARI) mezi "
-        "labels_true a labels_pred pomocí pair-countingu: sestavte "
-        "kontingenční tabulku n_ij (skutečný štítek i vs. predikovaný "
-        "štítek j), spočtěte řádkové/sloupcové součty a_i, b_j a celkový "
-        "počet vzorků n, a dosaďte do vzorce ARI = (sum_ij C(n_ij,2) - "
-        "[sum_i C(a_i,2) * sum_j C(b_j,2)] / C(n,2)) / (0.5 * [sum_i "
-        "C(a_i,2) + sum_j C(b_j,2)] - [sum_i C(a_i,2) * sum_j C(b_j,2)] / "
-        "C(n,2)), kde C(k,2) = k*(k-1)/2."
+    assert isinstance(labels_true, np.ndarray)
+    assert isinstance(labels_pred, np.ndarray)
+    assert labels_true.ndim == 1
+    assert labels_pred.ndim == 1
+    assert labels_true.shape == labels_pred.shape
+
+    n = len(labels_true)
+
+    # Kontingenční tabulka n_ij
+    true_labels = np.unique(labels_true)
+    pred_labels = np.unique(labels_pred)
+
+    contingency = np.zeros(
+        (len(true_labels), len(pred_labels)),
+        dtype=int
     )
+
+    for i, true_label in enumerate(true_labels):
+        for j, pred_label in enumerate(pred_labels):
+            contingency[i, j] = np.sum(
+                (labels_true == true_label)
+                & (labels_pred == pred_label)
+            )
+
+    # C(k, 2)
+    def combinations_2(k: int) -> float:
+        if k < 2:
+            return 0.0
+
+        return k * (k - 1) / 2
+
+    # Řádkové a sloupcové součty
+    row_sums = np.sum(contingency, axis=1)
+    col_sums = np.sum(contingency, axis=0)
+
+    # index = sum_ij C(n_ij, 2)
+    index = sum(
+        combinations_2(int(value))
+        for value in contingency.ravel()
+    )
+
+    # sum_i C(a_i, 2)
+    sum_rows = sum(
+        combinations_2(int(value))
+        for value in row_sums
+    )
+
+    # sum_j C(b_j, 2)
+    sum_cols = sum(
+        combinations_2(int(value))
+        for value in col_sums
+    )
+
+    # C(n, 2)
+    total_pairs = combinations_2(n)
+
+    if total_pairs == 0:
+        return 1.0
+
+    # expected_index
+    expected_index = (
+            sum_rows * sum_cols / total_pairs
+    )
+
+    # max_index
+    max_index = 0.5 * (sum_rows + sum_cols)
+
+    # ARI
+    denominator = max_index - expected_index
+
+    if denominator == 0:
+        return 1.0 if index == max_index else 0.0
+
+    ari = (
+            (index - expected_index)
+            / denominator
+    )
+
+    return float(ari)
